@@ -17,7 +17,7 @@ import com.app.gmm.mobileplyer.R;
 public class MainActivity extends Activity{
     private FrameLayout fl_main_content;
 
-    private RadioGroup rg_bottom_tag; 
+    private RadioGroup rg_bottom_tag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
