@@ -27,6 +27,6 @@ public class MainActivity extends Activity{
         fl_main_content = (FrameLayout) findViewById(R.id.fl_main_content);
         rg_bottom_tag = (RadioGroup) findViewById(R.id.rg_bottom_tag);
 
-        rg_bottom_tag.check(R.id.rb_video); 
+        rg_bottom_tag.check(R.id.rb_video);
     }
 }

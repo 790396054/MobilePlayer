@@ -1,11 +1,11 @@
-package com.app.gmm.mobileplyer.activity.pager;
+package com.app.gmm.mobileplyer.pager;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
 
-import com.app.gmm.mobileplyer.activity.basepager.BasePager;
+import com.app.gmm.mobileplyer.basepager.BasePager;
 
 /**
  * Created by gmm on 2017/2/18.

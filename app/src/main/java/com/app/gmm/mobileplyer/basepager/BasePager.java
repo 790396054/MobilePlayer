@@ -1,4 +1,4 @@
-package com.app.gmm.mobileplyer.activity.basepager;
+package com.app.gmm.mobileplyer.basepager;
 
 import android.content.Context;
 import android.view.View;
