@@ -12,7 +12,7 @@ public abstract class BasePager {
 
     protected Context mContext; // 上下文
 
-    private View mRootView;
+    public View mRootView;
 
     public BasePager(Context context){
         this.mContext = context;

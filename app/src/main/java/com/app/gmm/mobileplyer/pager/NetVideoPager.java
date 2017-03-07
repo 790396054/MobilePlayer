@@ -2,6 +2,7 @@ package com.app.gmm.mobileplyer.pager;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ public class NetVideoPager extends BasePager {
         textView = new TextView(mContext);
         textView.setTextColor(Color.GREEN);
         textView.setTextSize(22);
+        textView.setGravity(Gravity.CENTER);
         return textView;
     }
 
