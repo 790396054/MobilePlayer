@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.FrameLayout;
 import android.widget.RadioGroup;
@@ -28,7 +27,7 @@ import java.util.List;
  * 主页面
  */
 
-public class MainActivity extends FragmentActivity{
+public class MainActivity extends FragmentActivity {
     private FrameLayout fl_main_content;
 
     private RadioGroup mRadioGroup;
@@ -37,6 +36,11 @@ public class MainActivity extends FragmentActivity{
 
     private int position; // 选中的位置
     private BasePager mBasePager;
+
+    /**
+     * 上次切换的Fragment
+     */
+    private Fragment mContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,25 +62,11 @@ public class MainActivity extends FragmentActivity{
         mRadioGroup.check(R.id.rb_video); // 默认选中页面
     }
 
-    /**
-     * 返回pager页面
-     * @return
-     */
-//    private BasePager getBasePager() {
-//        BasePager pager = mPagers.get(position);
-//        if (pager != null) {
-//            pager.initData();
-//            return pager;
-//        }
-//        return null;
-//    }
-
-
-    class MyOnCheckedChangeListener implements RadioGroup.OnCheckedChangeListener{
+    class MyOnCheckedChangeListener implements RadioGroup.OnCheckedChangeListener {
 
         @Override
         public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-            switch (checkedId){
+            switch (checkedId) {
                 default:
                     position = 0;
                     break;
@@ -94,18 +84,66 @@ public class MainActivity extends FragmentActivity{
                     break;
             }
             // 设置Fragment
-            setFragment();
+//            setFragment();
+            //根据位置得到对应的Fragment
+            Fragment to = getFragment();
+            //替换
+            switchFrament(mContent, to);
         }
+    }
+
+    /**
+     * 根据位置得到对应的Fragment
+     *
+     * @return
+     */
+    private Fragment getFragment() {
+        Fragment fragment = mPagers.get(position);
+        return fragment;
     }
 
     /**
      * 设置Fragment
      */
-    private void setFragment() {
+   /* private void setFragment() {
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.fl_main_content, mPagers.get(position));
         transaction.commit();
-    }
+    }*/
 
+
+    /**
+     * @param from 刚显示的Fragment,马上就要被隐藏了
+     * @param to   马上要切换到的Fragment，一会要显示
+     */
+    private void switchFrament(Fragment from, Fragment to) {
+        if (from != to) {
+            mContent = to;
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            //才切换
+            //判断有没有被添加
+            if (!to.isAdded()) {
+                //to没有被添加
+                //from隐藏
+                if (from != null) {
+                    ft.hide(from);
+                }
+                //添加to
+                if (to != null) {
+                    ft.add(R.id.fl_main_content, to).commit();
+                }
+            } else {
+                //to已经被添加
+                // from隐藏
+                if (from != null) {
+                    ft.hide(from);
+                }
+                //显示to
+                if (to != null) {
+                    ft.show(to).commit();
+                }
+            }
+        }
+    }
 }

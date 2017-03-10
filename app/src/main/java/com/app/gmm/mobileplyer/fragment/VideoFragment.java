@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.app.gmm.mobileplyer.pager.AudioPager;
 import com.app.gmm.mobileplyer.pager.VideoPager;
+import com.app.gmm.mobileplyer.utils.LogUtil;
 
 /**
  * Created by gmm on 2017/3/7.
@@ -27,6 +28,7 @@ public class VideoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mVideoPager.initData();
+        LogUtil.d("VideoFragment onCreateView ... ");
         return mVideoPager.mRootView;
     }
 }

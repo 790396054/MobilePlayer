@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.app.gmm.mobileplyer.pager.NetVideoPager;
+import com.app.gmm.mobileplyer.utils.LogUtil;
 
 /**
  * Created by gmm on 2017/3/7.
@@ -25,6 +26,7 @@ public class NetVideoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mNetVideoPager.initData();
+        LogUtil.d("NetVideoFragment onCreateView ... ");
         return mNetVideoPager.mRootView;
     }
 }
