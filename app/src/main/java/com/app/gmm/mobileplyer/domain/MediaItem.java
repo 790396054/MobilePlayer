@@ -27,5 +27,16 @@ public class MediaItem {
      * 播放地址
      */
     public String data;
+
+    @Override
+    public String toString() {
+        return "MediaItem{" +
+                "name='" + name + '\'' +
+                ", duration=" + duration +
+                ", size=" + size +
+                ", artist='" + artist + '\'' +
+                ", data='" + data + '\'' +
+                '}';
+    }
 }
 
