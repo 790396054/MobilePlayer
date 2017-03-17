@@ -18,6 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.MainActivity" android:launchMode="singleTask"/>
+        <activity android:name=".activity.SystemVideoPlayer" />
     </application>
 
 </manifest>

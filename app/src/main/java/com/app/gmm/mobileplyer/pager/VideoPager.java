@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.gmm.mobileplyer.R;
+import com.app.gmm.mobileplyer.activity.SystemVideoPlayer;
 import com.app.gmm.mobileplyer.adapter.VideoPagerAdapter;
 import com.app.gmm.mobileplyer.basepager.BasePager;
 import com.app.gmm.mobileplyer.domain.MediaItem;
@@ -78,8 +79,12 @@ public class VideoPager extends BasePager {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(mContext, "" +  mMediaItems.get(position), Toast.LENGTH_SHORT).show();
-                //
-                Intent intent = new Intent();
+                // 调用系统播放器播放视频--隐式意图
+//                Intent intent = new Intent();
+//                intent.setDataAndType(Uri.parse(mMediaItems.get(position).data), "video/*");
+//                mContext.startActivity(intent);
+                // 调用自己写的播放器--显示意图
+                Intent intent = new Intent(mContext, SystemVideoPlayer.class);
                 intent.setDataAndType(Uri.parse(mMediaItems.get(position).data), "video/*");
                 mContext.startActivity(intent);
             }
