@@ -78,7 +78,7 @@ public class VideoPager extends BasePager {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(mContext, "" +  mMediaItems.get(position), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mContext, "" +  mMediaItems.get(position), Toast.LENGTH_SHORT).show();
                 // 调用系统播放器播放视频--隐式意图
 //                Intent intent = new Intent();
 //                intent.setDataAndType(Uri.parse(mMediaItems.get(position).data), "video/*");
