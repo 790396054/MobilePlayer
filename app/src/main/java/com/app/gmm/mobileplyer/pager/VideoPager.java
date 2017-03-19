@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
@@ -25,6 +26,7 @@ import com.app.gmm.mobileplyer.activity.SystemVideoPlayer;
 import com.app.gmm.mobileplyer.adapter.VideoPagerAdapter;
 import com.app.gmm.mobileplyer.basepager.BasePager;
 import com.app.gmm.mobileplyer.domain.MediaItem;
+import com.app.gmm.mobileplyer.utils.SerializableUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,13 +81,20 @@ public class VideoPager extends BasePager {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Toast.makeText(mContext, "" +  mMediaItems.get(position), Toast.LENGTH_SHORT).show();
-                // 调用系统播放器播放视频--隐式意图
+                // 1.调用系统播放器播放视频--隐式意图
 //                Intent intent = new Intent();
 //                intent.setDataAndType(Uri.parse(mMediaItems.get(position).data), "video/*");
 //                mContext.startActivity(intent);
-                // 调用自己写的播放器--显示意图
+
+                // 2.调用自己写的播放器--显示意图
+//                Intent intent = new Intent(mContext, SystemVideoPlayer.class);
+//                intent.setDataAndType(Uri.parse(mMediaItems.get(position).data), "video/*");
+//                mContext.startActivity(intent);
+
+                // 3.传递列表数据
                 Intent intent = new Intent(mContext, SystemVideoPlayer.class);
-                intent.setDataAndType(Uri.parse(mMediaItems.get(position).data), "video/*");
+                intent.putExtra("videolist", SerializableUtil.toJson(mMediaItems));
+                intent.putExtra("position",position);
                 mContext.startActivity(intent);
             }
         });

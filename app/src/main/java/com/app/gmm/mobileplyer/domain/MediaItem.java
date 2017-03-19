@@ -1,5 +1,7 @@
 package com.app.gmm.mobileplyer.domain;
 
+import java.io.Serializable;
+
 /**
  * Created by gmm on 2017/3/14.
  * 视频实体类
