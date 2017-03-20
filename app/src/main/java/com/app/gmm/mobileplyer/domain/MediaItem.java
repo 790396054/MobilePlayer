@@ -1,7 +1,5 @@
 package com.app.gmm.mobileplyer.domain;
 
-import java.io.Serializable;
-
 /**
  * Created by gmm on 2017/3/14.
  * 视频实体类
@@ -17,6 +15,7 @@ public class MediaItem {
      * 时长
      */
     public long duration;
+
     /**
      * 大小
      */
@@ -24,7 +23,7 @@ public class MediaItem {
     /**
      * 艺术家
      */
-    public String  artist;
+    public String artist;
     /**
      * 播放地址
      */

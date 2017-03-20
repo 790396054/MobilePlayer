@@ -263,10 +263,9 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener{
             // Handle clicks for btnSwitchPlayer
         } else if ( v == btnExit ) {
             // Handle clicks for btnExit
-        } else if ( v == btnPreVideo ) {
-            // Handle clicks for btnPreVideo
-        } else if ( v == btnVideoPlayPause ) {
-            // Handle clicks for btnVideoPlayPause
+        } else if ( v == btnPreVideo ) { // 上一个按钮
+            preVideo();
+        } else if ( v == btnVideoPlayPause ) { //播放视频按钮
             if (mVideoView.isPlaying()) { // 播放视频
                 mVideoView.pause();
                 btnVideoPlayPause.setBackgroundResource(R.drawable.btn_video_play_selector);
@@ -274,10 +273,72 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener{
                 mVideoView.start();
                 btnVideoPlayPause.setBackgroundResource(R.drawable.btn_video_pause_selector);
             }
-        } else if ( v == btnNextVideo ) {
-            // Handle clicks for btnNextVideo
+        } else if ( v == btnNextVideo ) { // 下一个按钮
+            nextVideo();
         } else if ( v == btnSwitchScreen ) {
             // Handle clicks for btnSwitchScreen
+        }
+    }
+
+    // 播放下一个视频
+    private void nextVideo() {
+        if (mediaItems != null && mediaItems.size() > 0) {
+            position++;
+            if (position < mediaItems.size()) {
+                MediaItem item = mediaItems.get(position);
+                tvVideoName.setText(item.name);
+                mVideoView.setVideoPath(item.data);
+                btnVideoPlayPause.setBackgroundResource(R.drawable.btn_video_pause_selector);
+                setBtnState();
+            }
+        } else if (uri != null) {
+            setBtnState();
+        }
+    }
+
+    // 设置按钮的状态
+    private void setBtnState() {
+        if (mediaItems != null && mediaItems.size() > 0) {
+            if (mediaItems.size() == 1) {
+                setBtnEnabled(false);
+            }else {
+                if (position == 0) {
+                    btnPreVideo.setEnabled(false);
+                    btnPreVideo.setBackgroundResource(R.drawable.btn_pre_gray);
+                } else if (position == mediaItems.size() - 1) {
+                    btnNextVideo.setEnabled(false);
+                    btnNextVideo.setBackgroundResource(R.drawable.btn_next_gray);
+                } else {
+                    setBtnEnabled(true);
+                }
+            }
+        } else if (uri != null) {
+            setBtnEnabled(false);
+        }
+    }
+
+    private void setBtnEnabled(boolean enabled){
+        btnPreVideo.setEnabled(enabled);
+        btnNextVideo.setEnabled(enabled);
+        if (!enabled) {
+            btnPreVideo.setBackgroundResource(android.R.color.darker_gray);
+            btnNextVideo.setBackgroundResource(android.R.color.darker_gray);
+        }
+    }
+
+    // 播放上一个视频
+    private void preVideo() {
+        if (mediaItems != null && mediaItems.size() > 0) {
+            position--;
+            if (position < mediaItems.size() && position > 0) {
+                MediaItem item = mediaItems.get(position);
+                tvVideoName.setText(item.name);
+                mVideoView.setVideoPath(item.data);
+            }else {
+                setBtnState();
+            }
+        }else if (uri != null){
+            setBtnState();
         }
     }
 
