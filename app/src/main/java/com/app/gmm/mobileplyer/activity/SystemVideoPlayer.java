@@ -21,12 +21,12 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.app.gmm.mobileplyer.R;
 import com.app.gmm.mobileplyer.domain.MediaItem;
 import com.app.gmm.mobileplyer.utils.SerializableUtil;
 import com.app.gmm.mobileplyer.utils.Utils;
+import com.app.gmm.mobileplyer.view.VideoView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -47,6 +47,15 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener{
      * 播放进度
      */
     private static final int PROGRESS_INT = 1;
+    /**
+     * 隐藏控制面板的消息
+     */
+    private static final int HIDE_MEDIACONTROLLER = 2;
+
+    /**
+     * 控制面板默认显示时长
+     */
+    private static final int SHOW_TIME = 4000;
 
     private VideoView mVideoView;
     private LinearLayout llTop;
@@ -143,22 +152,22 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener{
 
             @Override
             public boolean onDoubleTap(MotionEvent e) { // 双击
-                if (mVideoView.isPlaying()) {
-                    mVideoView.pause();
-                }else {
-                    mVideoView.start();
-                }
+                startAndPause();
                 return super.onDoubleTap(e);
             }
 
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) { // 单击
-                if (isVisibleControl) {
+                if (isVisibleControl) { // 显示状态,隐藏控制面板
                     isVisibleControl = false;
                     rlControlView.setVisibility(View.GONE);
-                }else {
+                    // 取消发消息
+                    mHandler.removeMessages(HIDE_MEDIACONTROLLER);
+                }else { // 隐藏状态，显示控制面板
                     isVisibleControl = true;
                     rlControlView.setVisibility(View.VISIBLE);
+                    // 发消息隐藏
+                    mHandler.sendEmptyMessageDelayed(HIDE_MEDIACONTROLLER, SHOW_TIME);
                 }
                 return super.onSingleTapConfirmed(e);
             }
@@ -220,6 +229,10 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener{
                     // 发送延迟消息，1秒钟刷新
                     mHandler.sendEmptyMessageDelayed(PROGRESS_INT, 1000);
                     break;
+                case HIDE_MEDIACONTROLLER:
+                    isVisibleControl = true;
+                    rlControlView.setVisibility(View.GONE);
+                    break;
             }
         }
     };
@@ -246,6 +259,12 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener{
                 tvDuration.setText(mUtils.stringForTime(duration));
                 // 发送消息
                 mHandler.sendEmptyMessage(PROGRESS_INT);
+                // 默认隐藏控制面板
+                isVisibleControl = false;
+                rlControlView.setVisibility(View.GONE);
+                //
+                mVideoView.setVideoSize(mp.getVideoWidth(), mp.getVideoHeight());
+
             }
         });
 
@@ -284,12 +303,12 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener{
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+                mHandler.removeMessages(HIDE_MEDIACONTROLLER);
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                mHandler.sendEmptyMessageDelayed(HIDE_MEDIACONTROLLER, SHOW_TIME);
             }
         });
     }
@@ -317,6 +336,9 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener{
         } else if ( v == btnSwitchScreen ) {
             // Handle clicks for btnSwitchScreen
         }
+
+        mHandler.removeMessages(HIDE_MEDIACONTROLLER);
+        mHandler.sendEmptyMessageDelayed(HIDE_MEDIACONTROLLER, SHOW_TIME);
     }
 
     private void startAndPause() {
