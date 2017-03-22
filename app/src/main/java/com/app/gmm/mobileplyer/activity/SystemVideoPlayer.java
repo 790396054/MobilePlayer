@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +65,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener{
     private Button btnVideoPlayPause;
     private Button btnNextVideo;
     private Button btnSwitchScreen;
+    private RelativeLayout rlControlView;
 
     /**
      * 手势识别器
@@ -81,6 +83,8 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener{
      * 要播放的列表中的具体位置
      */
     int position;
+
+    private boolean isVisibleControl = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -149,7 +153,13 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener{
 
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) { // 单击
-                Toast.makeText(SystemVideoPlayer.this, "单击", Toast.LENGTH_SHORT).show();
+                if (isVisibleControl) {
+                    isVisibleControl = false;
+                    rlControlView.setVisibility(View.GONE);
+                }else {
+                    isVisibleControl = true;
+                    rlControlView.setVisibility(View.VISIBLE);
+                }
                 return super.onSingleTapConfirmed(e);
             }
         });
@@ -179,6 +189,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener{
         btnVideoPlayPause = (Button)findViewById( R.id.btn_video_play_pause );
         btnNextVideo = (Button)findViewById( R.id.btn_next_video );
         btnSwitchScreen = (Button)findViewById( R.id.btn_switch_screen );
+        rlControlView = (RelativeLayout) findViewById(R.id.rl_control_view);
         setListener();
 
 
