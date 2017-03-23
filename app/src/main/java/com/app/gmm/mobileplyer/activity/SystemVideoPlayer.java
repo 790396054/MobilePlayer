@@ -5,12 +5,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -93,7 +95,50 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener{
      */
     int position;
 
+    /**
+     * 是否显示控制面板
+     */
     private boolean isVisibleControl = true;
+
+    /**
+     * 是否全屏播放
+     */
+    private boolean isFullScreen;
+
+    /**
+     * 屏幕的宽
+     */
+    private int screenWidth;
+
+    /**
+     * 屏幕的高
+     */
+    private int screenHeight;
+
+    /**
+     * 视频真实的宽
+     */
+    private int videoWidth;
+
+    /**
+     * 视频真实的高
+     */
+    private int videoHeight;
+
+    /**
+     * 音频管理者
+     */
+    private AudioManager am;
+
+    /**
+     * 当前声音
+     */
+    private int currentVoice;
+
+    /**
+     * 最大声音
+     */
+    private int maxVoice;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -172,6 +217,39 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener{
                 return super.onSingleTapConfirmed(e);
             }
         });
+
+        // 得到屏幕的宽高
+        // 过时的方法
+//        screenWidth = getWindowManager().getDefaultDisplay().getWidth();
+//        screenHeight = getWindowManager().getDefaultDisplay().getHeight();
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        screenWidth = metrics.widthPixels;
+        screenHeight = metrics.heightPixels;
+        // 得到音量
+        am = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+        currentVoice = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+        maxVoice = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+
+        // 设置音量
+        seekbarVoice.setProgress(currentVoice);
+        seekbarVoice.setMax(maxVoice);
+    }
+
+    /**
+     *
+     */
+    private void setVideoType() {
+        if (isFullScreen) { // 全屏，屏幕有多大就是多大
+            mVideoView.setVideoSize(screenWidth, screenHeight);
+
+            btnSwitchScreen.setBackgroundResource(R.drawable.btn_default_screen_normal);
+            isFullScreen = false;
+        } else { // 默认
+            mVideoView.setVideoSize(videoWidth, videoHeight);
+            btnSwitchScreen.setBackgroundResource(R.drawable.btn_default_screen_pressed);
+            isFullScreen = true;
+        }
     }
 
     /**
@@ -262,9 +340,9 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener{
                 // 默认隐藏控制面板
                 isVisibleControl = false;
                 rlControlView.setVisibility(View.GONE);
-                //
-                mVideoView.setVideoSize(mp.getVideoWidth(), mp.getVideoHeight());
 
+                videoWidth = mp.getVideoWidth();
+                videoHeight = mp.getVideoHeight();
             }
         });
 
@@ -311,6 +389,27 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener{
                 mHandler.sendEmptyMessageDelayed(HIDE_MEDIACONTROLLER, SHOW_TIME);
             }
         });
+
+        seekbarVoice.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    am.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
+                    seekbarVoice.setProgress(progress);
+                    currentVoice = progress;
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
     /**
@@ -321,7 +420,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener{
      */
     @Override
     public void onClick(View v) {
-        if ( v == btnVoice ) {
+        if ( v == btnVoice ) { // 设置音量
             // Handle clicks for btnVoice
         } else if ( v == btnSwitchPlayer ) {
             // Handle clicks for btnSwitchPlayer
@@ -333,8 +432,8 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener{
             startAndPause();
         } else if ( v == btnNextVideo ) { // 下一个按钮
             nextVideo();
-        } else if ( v == btnSwitchScreen ) {
-            // Handle clicks for btnSwitchScreen
+        } else if ( v == btnSwitchScreen ) { // 切换播放屏幕大小
+            setVideoType();
         }
 
         mHandler.removeMessages(HIDE_MEDIACONTROLLER);
