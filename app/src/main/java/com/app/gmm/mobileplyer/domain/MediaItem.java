@@ -29,6 +29,14 @@ public class MediaItem {
      */
     public String data;
 
+    /**
+     * 视频描述
+     */
+    public String desc;
+
+
+    public String imageUrl;
+
     @Override
     public String toString() {
         return "MediaItem{" +
@@ -37,6 +45,8 @@ public class MediaItem {
                 ", size=" + size +
                 ", artist='" + artist + '\'' +
                 ", data='" + data + '\'' +
+                ", desc='" + desc + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
 }
