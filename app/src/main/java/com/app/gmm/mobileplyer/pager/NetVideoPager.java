@@ -19,6 +19,8 @@ import com.app.gmm.mobileplyer.domain.MediaItem;
 import com.app.gmm.mobileplyer.utils.Constants;
 import com.app.gmm.mobileplyer.utils.LogUtil;
 import com.app.gmm.mobileplyer.utils.SerializableUtil;
+import com.app.gmm.mobileplyer.utils.TimeUtil;
+import com.app.gmm.mobileplyer.view.XListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +40,7 @@ import java.util.ArrayList;
 public class NetVideoPager extends BasePager {
 
     @ViewInject(R.id.listView)
-    private ListView mListView;
+    private XListView mListView;
 
     @ViewInject(R.id.tv_net_memo)
     private  TextView mTextView;
@@ -84,6 +86,8 @@ public class NetVideoPager extends BasePager {
                 mContext.startActivity(intent);
             }
         });
+        mListView.setPullLoadEnable(true);
+        mListView.setXListViewListener(new MyIXListViewListener());
         return view;
     }
 
@@ -91,6 +95,35 @@ public class NetVideoPager extends BasePager {
     public void initData() {
         super.initData();
         LogUtil.e("网络视频的数据被初始化了。。。");
+        getDataFromNete();
+    }
+
+    class MyIXListViewListener implements XListView.IXListViewListener{
+
+        @Override
+        public void onRefresh() {
+            mediaItems.clear();
+            getDataFromNete();
+            adapter = new NetVideoPagerAdapter(mContext, mediaItems);
+            onLoad();
+        }
+
+        @Override
+        public void onLoadMore() {
+
+        }
+    }
+
+    private void onLoad() {
+        mListView.stopRefresh();
+        mListView.stopLoadMore();
+        mListView.setRefreshTime(TimeUtil.getSysTime());
+    }
+
+    /**
+     * 得到网络数据
+     */
+    private void getDataFromNete() {
         RequestParams params = new RequestParams(Constants.NET_URL);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override

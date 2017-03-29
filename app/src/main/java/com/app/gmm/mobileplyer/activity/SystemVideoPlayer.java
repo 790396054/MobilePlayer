@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.app.gmm.mobileplyer.R;
 import com.app.gmm.mobileplyer.domain.MediaItem;
 import com.app.gmm.mobileplyer.utils.SerializableUtil;
+import com.app.gmm.mobileplyer.utils.TimeUtil;
 import com.app.gmm.mobileplyer.utils.Utils;
 import com.app.gmm.mobileplyer.view.VideoView;
 import com.google.gson.Gson;
@@ -300,7 +301,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener{
                     seekbarVideo.setProgress(duration);
                     tvVideoTime.setText(mUtils.stringForTime(duration));
                     // 设置系统时间
-                    tvTime.setText(getSysTime());
+                    tvTime.setText(TimeUtil.getSysTime());
 
                     // 取消消息
                     mHandler.removeMessages(PROGRESS_INT);
@@ -314,15 +315,6 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener{
             }
         }
     };
-
-    /**
-     * 得到系统时间
-     * @return
-     */
-    private String getSysTime() {
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-        return format.format(new Date());
-    }
 
     private void setListener() {
         // 设置监听 准备好了的监听

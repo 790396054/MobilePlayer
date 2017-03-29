@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import com.app.gmm.mobileplyer.R;
 import com.app.gmm.mobileplyer.domain.MediaItem;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.squareup.picasso.Picasso;
 
 import org.xutils.x;
 
@@ -65,9 +68,18 @@ public class NetVideoPagerAdapter extends BaseAdapter {
         MediaItem mediaItem = mediaItems.get(position);
         viewHoder.tv_name.setText(mediaItem.name);
         viewHoder.tv_desc.setText(mediaItem.desc);
-        x.image().bind(viewHoder.iv_icon, mediaItem.imageUrl);
+//        x.image().bind(viewHoder.iv_icon, mediaItem.imageUrl);
         //1.使用xUtils3请求图片
 //        x.image().bind(viewHoder.iv_icon,mediaItem.getImageUrl());
+//        Glide.with(context).load(mediaItem.imageUrl)
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .placeholder(R.drawable.video_default)
+//                .error(R.drawable.video_default)
+//                .into(viewHoder.iv_icon);
+        Picasso.with(context).load(mediaItem.imageUrl)
+                .error(R.drawable.video_default)
+                .placeholder(R.drawable.video_default)
+                .into(viewHoder.iv_icon);
         //2.使用Glide请求图片
 //        Glide.with(context).load(mediaItem.getImageUrl())
 //                .diskCacheStrategy(DiskCacheStrategy.ALL)
