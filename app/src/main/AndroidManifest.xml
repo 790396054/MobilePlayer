@@ -51,6 +51,11 @@
                 <data android:mimeType="video/3gpp2" />
             </intent-filter>
         </activity>
+        <service android:name=".service.MusicPlayService">
+            <intent-filter>
+                <action android:name="com.atguigu.mobileplayer_OPENAUDIO" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
