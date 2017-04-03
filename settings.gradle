@@ -1,1 +1,1 @@
-include ':app', ':StartAllPlayer', ':xutils', ':xListView'
+include ':app', ':StartAllPlayer', ':xutils', ':xListView', ':speechdemo'
