@@ -80,4 +80,14 @@ interface IPlayMusicService {
     * @return
     */
     int getPlayMode();
+
+    /**
+     拖动音频
+     */
+    void seekTo(int position);
+
+    /**
+    * 是否正在播放
+    */
+    boolean isPlaying();
 }
