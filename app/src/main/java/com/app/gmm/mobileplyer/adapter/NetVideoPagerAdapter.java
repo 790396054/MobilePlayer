@@ -33,6 +33,15 @@ public class NetVideoPagerAdapter extends BaseAdapter {
         this.mediaItems = mediaItems;
     }
 
+    @Override
+    public int getViewTypeCount() {
+        return super.getViewTypeCount();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
 
     @Override
     public int getCount() {
